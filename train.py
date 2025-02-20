@@ -14,7 +14,7 @@ def parse():
     parser.add_argument('-g', '--GPU-NUM', type=int, default=0, help='GPU number to allocate')
     parser.add_argument('-b', '--batch-size', type=int, default=32, help='Batch size')
 
-    parser.add_argument('-e', '--num-epochs', type=int, default=50, help='Number of epochs')
+    parser.add_argument('-e', '--num-epochs', type=int, default=150, help='Number of epochs')
     parser.add_argument('-l', '--lr', type=float, default=1e-3, help='Learning rate')
     parser.add_argument('--data-path', type=Path, default='saves/candle_1d/AAPL_daily_20250130204757.csv', help='csv file locaiton')
 

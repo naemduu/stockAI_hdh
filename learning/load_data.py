@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 
 
 class StockDataset(Dataset):
-    def __init__(self, csv_file, seq_len=10):
+    def __init__(self, csv_file, seq_len=5):
         self.data = pd.read_csv(csv_file)[2:]
         self.seq_len = seq_len
 
@@ -21,7 +21,7 @@ class StockDataset(Dataset):
         inputs = inputs.astype('float32')  # 데이터 타입을 float32로 변환
 
         # 타겟 데이터 (5일 후 Open 가격 변화율)
-        future = self.data.iloc[idx+self.seq_len+4, [4]].values.astype('float32')[0]
+        future = self.data.iloc[idx+self.seq_len+0, [4]].values.astype('float32')[0]
         latest = self.data.iloc[idx+self.seq_len-1, [4]].values.astype('float32')[0]
         labels = future/latest
 

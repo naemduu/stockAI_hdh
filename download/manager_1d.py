@@ -1,5 +1,7 @@
 # ui_manager.py
 import tkinter as tk
+import time
+import pandas as pd
 from tkinter import messagebox
 
 # download_manager.py
@@ -20,13 +22,33 @@ class DownloadManager:
     def download_data(self, ticker):
         try:
             print(f"🔄 {ticker} 데이터 업데이트 시작...")
-            data = yf.download(ticker, period="10y", interval="1d")
-            file_name = f"{self.data_dir}/{ticker}_daily_{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
-            data.to_csv(file_name)
 
-            self.ticker_status[ticker]["status"] = "success"
-            self.ticker_status[ticker]["error"] = None
-            print(f"✅ {ticker} 데이터 다운로드 성공! -> {file_name}")
+            all_data = []
+            for year in range(2):  # 최근 10년 동안 반복
+                start = f"{datetime.now().year - (9 - year)}-01-01"
+                end = f"{datetime.now().year - (9 - year) + 1}-01-01"
+
+                data = yf.download(ticker, start=start, end=end, interval="1d", auto_adjust=False)
+
+                if data.empty:
+                    print(f"⚠️ {ticker} ({start}~{end}) 데이터 없음")
+                    continue  # 데이터 없으면 스킵
+
+                all_data.append(data)
+                time.sleep(5)  # 요청 사이 딜레이 추가 (야후가 화내지 않게!)
+
+            if all_data:
+                final_data = pd.concat(all_data)
+                file_name = f"{self.data_dir}/{ticker}_daily_{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
+                final_data.to_csv(file_name)
+
+                self.ticker_status[ticker]["status"] = "success"
+                self.ticker_status[ticker]["error"] = None
+                print(f"✅ {ticker} 데이터 다운로드 성공! -> {file_name}")
+            else:
+                self.ticker_status[ticker]["status"] = "failed"
+                self.ticker_status[ticker]["error"] = "No data available"
+                print(f"❌ {ticker} 데이터 다운로드 실패: 데이터 없음")
 
         except Exception as e:
             self.ticker_status[ticker]["status"] = "failed"
@@ -36,12 +58,14 @@ class DownloadManager:
     def update_all_tickers(self):
         for ticker in self.tickers:
             self.download_data(ticker)
+            time.sleep(2)
 
     def retry_failed_updates(self):
         for ticker, status in self.ticker_status.items():
             if status["status"] == "failed":
                 print(f"🔄 {ticker} 재시도...")
                 self.download_data(ticker)
+                time.sleep(2)
 
 
 
