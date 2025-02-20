@@ -3,7 +3,7 @@ import torch
 
 
 class StockTransformer(nn.Module):
-    def __init__(self, input_dim, d_model=128, nhead=4, num_layers=3):
+    def __init__(self, input_dim, d_model=32, nhead=4, num_layers=3):
         super(StockTransformer, self).__init__()
         self.embedding = nn.Linear(input_dim, d_model)
         self.encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=nhead)

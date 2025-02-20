@@ -24,7 +24,7 @@ class DownloadManager:
             print(f"🔄 {ticker} 데이터 업데이트 시작...")
 
             all_data = []
-            for year in range(2):  # 최근 10년 동안 반복
+            for year in range(10):  # 최근 10년 동안 반복
                 start = f"{datetime.now().year - (9 - year)}-01-01"
                 end = f"{datetime.now().year - (9 - year) + 1}-01-01"
 
@@ -39,7 +39,7 @@ class DownloadManager:
 
             if all_data:
                 final_data = pd.concat(all_data)
-                file_name = f"{self.data_dir}/{ticker}_daily_{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
+                file_name = f"{self.data_dir}/{ticker}_daily.csv"
                 final_data.to_csv(file_name)
 
                 self.ticker_status[ticker]["status"] = "success"

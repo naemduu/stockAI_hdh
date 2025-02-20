@@ -16,7 +16,7 @@ python download/download.py
 ```
 (2) 모델 훈련
 ```bash
-python train.py
+python train_part.py
 ```
 
 ## 업데이트 내역

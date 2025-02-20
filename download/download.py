@@ -9,9 +9,6 @@ from manager_1d import UIManager
 import manager_1d
 
 if __name__ == "__main__":
-    for idx, path in enumerate(sys.path):
-        print(f"{idx}: {path}")
-
     # 데이터 저장 경로
     os.makedirs(manager_1d.CANDLE_1D_PATH, exist_ok=True)
 
@@ -25,3 +22,5 @@ if __name__ == "__main__":
     # 데이터 다운로드 및 UI 업데이트
     download_manager.update_all_tickers()  # 데이터를 다운로드하고 상태 업데이트
     ui_manager.run()  # GUI 팝업 실행
+
+
